@@ -1,0 +1,26 @@
+name: Failure Scenario Practice
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test-logic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: This step will pass
+        run: echo "Starting tests..."
+
+      - name: This step will fail
+        # 'exit 1' tells the terminal that an error occurred
+        run: |
+          echo "Checking for bugs..."
+          exit 1 
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test-logic  # This job depends on 'test-logic'
+    steps:
+      - name: Attempting Deployment
+        run: echo "This will never run because the test failed!"
