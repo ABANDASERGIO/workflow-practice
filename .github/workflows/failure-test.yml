@@ -14,6 +14,7 @@ jobs:
 
       - name: This step will fail
         # 'exit 1' tells the terminal that an error occurred
+        continue-on-error: true
         run: |
           echo "Checking for bugs..."
           exit 1 
