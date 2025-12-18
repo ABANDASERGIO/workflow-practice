@@ -1,0 +1,23 @@
+name: Artifact Demo
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build-and-save:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create a dummy report
+        # This creates a simple text file inside the runner
+        run: |
+          echo "Build Version: 1.0.0" > build-report.txt
+          echo "Status: Success" >> build-report.txt
+          echo "Date: $(date)" >> build-report.txt
+
+      - name: Upload the report
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-build-report    # The name of the zip file you'll download
+          path: build-report.txt   # The path to the file you want to save
