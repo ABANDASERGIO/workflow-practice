@@ -1,0 +1,47 @@
+name: Unified Pipeline
+
+on: 
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  # JOB 1: Simulation of Building
+  build-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Code
+        run: echo "Building the application..."
+
+  # JOB 2: Simulation of Testing
+  test-job:
+    runs-on: ubuntu-latest
+    needs: build-job # Only runs if build succeeds
+    steps:
+      - name: Run Tests
+        # Change to 'exit 1' if you want to see the Failure alert
+        run: |
+          echo "Running unit tests..."
+          exit 0 
+
+  # JOB 3: The Messenger
+  slack-notifications:
+    runs-on: ubuntu-latest
+    # 'always()' ensures this runs even if 'test-job' fails
+    if: always() 
+    needs: [build-job, test-job] 
+    steps:
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          # Logic: If the test-job failed, make the bar red. Otherwise, green.
+          SLACK_COLOR: ${{ contains(needs.test-job.result, 'success') && '#32a852' || '#ad1717' }}
+          SLACK_TITLE: "Pipeline Status: ${{ needs.test-job.result }}"
+          SLACK_MESSAGE: |
+            *Workflow:* ${{ github.workflow }}
+            *Branch:* ${{ github.ref_name }}
+            *Event:* ${{ github.event_name }}
+            *Test Result:* ${{ needs.test-job.result }}
