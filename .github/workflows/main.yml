@@ -1,23 +1,15 @@
-name: Stage 3 - Jobs & Steps
+name: Stage 5 - Secrets Demo
 
 on:
   push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
-  demo-job:
-    name: Demo Job
+  secret-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Step 1
-        run: echo "This is step 1"
-
-      - name: Step 2
-        run: echo "This is step 2"
-
-  my-job:
-    name: my job
-    runs-on: ubuntu-latest 
-    steps:
-    - name: step1
-      run: echo "lets test it again"
-      
+      - name: Use secret safely
+        run: echo "Secret is $MY_SECRET"
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET_MESSAGE }}
