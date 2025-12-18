@@ -1,15 +1,15 @@
-name: Anatomy Test
+name: Stage 3 - Jobs & Steps
 
 on:
   push:
 
 jobs:
-  learning-job:
-    name: Learning Job
+  demo-job:
+    name: Demo Job
     runs-on: ubuntu-latest
     steps:
-      - name: Step 1 - Greeting
-        run: echo "Step 1 running"
+      - name: Step 1
+        run: echo "This is step 1"
 
-      - name: Step 2 - Confirmation
-        run: echo "Step 2 running"
+      - name: Step 2
+        run: echo "This is step 2"
