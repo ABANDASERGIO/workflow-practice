@@ -2,6 +2,8 @@ name: Stage 5 - Secrets Demo
 
 on:
   push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   secret-job:
