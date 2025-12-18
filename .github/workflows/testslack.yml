@@ -1,0 +1,34 @@
+name: Slack Notification Masterclass
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test-success:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Everything is fine
+        run: echo "Code is perfect!"
+
+      - name: Notify Slack of Success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: '#32a852' # Green
+          SLACK_TITLE: "Success! 🎉"
+          SLACK_MESSAGE: "The build passed on ${{ github.ref_name }}."
+
+  test-failure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Force a bug
+        run: exit 1
+
+      - name: Notify Slack of Failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: '#ad1717' # Red
+          SLACK_TITLE: "Failed! ❌"
+          SLACK_MESSAGE: "Alert! Build crashed on ${{ github.ref_name }}."
