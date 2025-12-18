@@ -13,3 +13,11 @@ jobs:
 
       - name: Step 2
         run: echo "This is step 2"
+
+  my-job:
+    name: my job
+    runs-on: ubuntu-latest 
+    steps:
+    - name: step1
+      run: echo "lets test it again"
+      
