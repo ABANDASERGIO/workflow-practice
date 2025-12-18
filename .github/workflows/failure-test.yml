@@ -1,23 +1,20 @@
 name: Failure Scenario Practice
 
 on: [push, workflow_dispatch]
-
 jobs:
   test-logic:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22] # This will trigger 3 parallel runs!
+    
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: This step will pass
-        run: echo "Starting tests..."
-
-      - name: This step will fail
-        # 'exit 1' tells the terminal that an error occurred
-        continue-on-error: true
-        run: |
-          echo "Checking for bugs..."
-          exit 1 
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: node -v
 
   deploy:
     runs-on: ubuntu-latest
